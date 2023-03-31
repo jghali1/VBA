@@ -1,3 +1,3 @@
 # VBA-Challenge
 ## *Summary*
-Performed 
+Utilized VBA script to analyze stock market trends  
