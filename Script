@@ -1,0 +1,122 @@
+
+Sub Stock():
+
+    Dim ws As Worksheet
+  For Each ws In Worksheets
+  
+Dim Ticker As Double
+Ticker = 2
+
+Dim Volume As Double
+Volume = 0
+
+  
+    
+    Dim WorksheetName As String
+    WorksheetName = ws.Name
+
+ws.Range("I1").Value = "Ticker"
+ws.Range("J1").Value = "Yearly Change"
+ws.Range("K1").Value = "Percent Change"
+ws.Range("L1").Value = "Total Stock Volume"
+
+ws.Range("Q1").Value = "Ticker"
+ws.Range("R1").Value = "Value"
+ws.Range("P2").Value = "Greatest % Increase"
+ws.Range("P3").Value = "Greatest % Decrease"
+ws.Range("P4").Value = "Greatest Total Volume"
+
+       Dim LastrowA As Long
+       Dim LastrowI As Long
+       Dim i As Long
+       Dim j As Long
+       Dim OpenPrice As Double
+       Dim ClosingPrice As Double
+       Dim PercentChange As Double
+       Dim YearlyChange As Double
+       Dim GreatestIncrease As Double
+       Dim GreatestDecrease As Double
+       
+       j = 2
+       
+LastrowA = ws.Cells(Rows.Count, 1).End(xlUp).Row
+            
+    For i = 2 To LastrowA
+
+    If ws.Cells(i + 1, 1).Value <> ws.Cells(i, 1).Value Then
+    ws.Cells(Ticker, 9).Value = ws.Cells(i, 1).Value
+    ws.Cells(Ticker, 10).Value = ws.Cells(i, 6).Value - ws.Cells(j, 3).Value
+    
+        If ws.Cells(Ticker, 10).Value < 0 Then
+        ws.Cells(Ticker, 10).Interior.ColorIndex = 3
+    Else
+    
+        ws.Cells(Ticker, 10).Interior.ColorIndex = 4
+        
+        End If
+        
+        If ws.Cells(j, 3).Value <> 0 Then
+        PercentChange = ((ws.Cells(i, 6).Value - ws.Cells(j, 3).Value) / ws.Cells(j, 3).Value)
+        ws.Cells(Ticker, 11).Value = Format(PercentChange, "Percent")
+   Else
+    
+        ws.Cells(Ticker, 11).Value = Format(0, "Percent")
+        
+        End If
+        
+        ws.Cells(Ticker, 12).Value = WorksheetFunction.Sum(Range(ws.Cells(j, 7), ws.Cells(i, 7)))
+        
+        Ticker = Ticker + 1
+        j = i + 1
+        
+        End If
+        
+        Next i
+        
+      LastrowI = ws.Cells(Rows.Count, 9).End(xlUp).Row
+      
+      Volume = ws.Cells(2, 12).Value
+      GreastestIncrease = ws.Cells(2, 11).Value
+      GreatestDecrease = ws.Cells(2, 11).Value
+        
+For i = 2 To LastrowI
+
+        If ws.Cells(i, 12).Value > Volume Then
+        Volume = ws.Cells(i, 12).Value
+        ws.Cells(4, 17).Value = ws.Cells(i, 9).Value
+        
+        Else
+        
+        Volume = Volume
+        
+        End If
+        
+    If ws.Cells(i, 11).Value > GreatestIncrease Then
+    GreatestIncrease = ws.Cells(i, 11).Value
+    ws.Cells(2, 17).Value = ws.Cells(i, 9).Value
+    
+    Else
+    
+    GreatestIncrase = GreatestIncrease
+    
+    End If
+    
+        If ws.Cells(i, 11).Value < GreatestDecrease Then
+        GreatestDecrease = ws.Cells(i, 11).Value
+        ws.Cells(3, 17).Value = ws.Cells(i, 9).Value
+        
+        Else
+        
+        GreatestDecrease = GreatestDecrease
+        
+        End If
+        
+        ws.Range("R2").Value = Format(GreatestIncrease, "Percent")
+        ws.Range("R3").Value = Format(GreatestDecrease, "Percent")
+        ws.Range("R4").Value = Format(Volume, "Scientific")
+               
+        Next i
+
+    Next ws
+
+End Sub
